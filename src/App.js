@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import './App.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {Aside} from 'components/Aside/Aside.jsx'
+import {RoutesList} from 'routes/AsideRoutes'
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
+
+import {ModalContext} from 'ModalContext.jsx'
+
+import {ModalCreateTask} from 'components/ModalCreateTask'
+
+
+export default function App() {
+    const [createTask,setCreateTask] = useState(false)
+    const setCreateTaskFunc = ()=>setCreateTask(createTask=>!createTask)
+    const [mask, setMask] = useState(false)
+    const setMuskFunk = ()=>setMask(mask=>!mask)
+    
+    const coustomMaskClass = !mask ? 'mask-active' : '';
+
+    return (
+        <ModalContext.Provider value={{
+            createTask,
+            setCreateTaskFunc,
+            mask,
+            setMuskFunk,
+            }}>
+
+            <Router>
+            <div className={coustomMaskClass}> </div>
+            <main>
+                <Aside/>
+                <section>
+                    <RoutesList  />
+                </section>
+            </main>
+            
+            <ModalCreateTask 
+            createTask={createTask}
+            mask={mask} 
+            setCreateTaskFunc={setCreateTaskFunc} 
+            setMuskFunk={setMuskFunk}
+            />
+            </Router>
+
+        </ModalContext.Provider>
+    );
 }
 
-export default App;
