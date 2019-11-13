@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import {UseStateValue} from 'context/State';
+import { setPriority } from 'os';
 
 export const ModalCreateTask = () => {
     const [state, dispatch] = UseStateValue();
@@ -18,9 +19,7 @@ export const ModalCreateTask = () => {
     })
 
     const clickOutside = (event)=> {
-        
         const target = event.target;
-
         if( !target.closest('#modalCreateMask') && state.displayModalCreateTask ) {
             closeModalCreateTask()
         }
@@ -33,7 +32,10 @@ export const ModalCreateTask = () => {
         
     })
 
-
+    const setPriorityMethod = (event) => {
+        console.log( event.target.value);
+        return true
+    }
 
     return (
         <div className={modalCreateTaskClass} id='modalCreateMask' >
@@ -57,23 +59,35 @@ export const ModalCreateTask = () => {
                             <div className='modal-create-task__container__first__body'>
                                 <div className='modal-create-task__container__first__body__meta'>
                                     <div className='modal-create-task__container__first__body__priority'>
-                                            LOW
+                                        <label htmlFor="creeate-task-priority">Select priority</label>
+                                            <select 
+                                            onChange={setPriorityMethod}
+                                            value='Select priority'
+                                            name="creeate-task-priority" 
+                                            id="creeate-task-priority">
+                                                <Priority />
+                                            </select>
+                                                
                                     </div>
                                     <div className='modal-create-task__container__first__body__data'>
-                                            29.11.2019
+                                    <label htmlFor="creeate-task-date">Set data</label>
+                                            <input type="text" id="creeate-task-date" value={new Date().toISOString().split('T')[0]}/>
                                     </div>
                                 </div>
                                 <div className='modal-create-task__container__first__body__name'>
-                                    Task name
+                                    <input type="text" placeholder='Type task name' value='Type task'/>
                                 </div>
 
                                 <div className='modal-create-task__container__first__body__status'>
                                     <div>
-                                    <select name="status" id="taskStatus">
-                                        <option value=""></option>                                    </select>
+                                    <label htmlFor="creeate-task-status">Select status</label>
+                                    <select name="status" id="creeate-task-status">
+                                        <Status/>                                 
+                                    </select>
                                     </div>
                                     <div className='modal-create-task__container__first__body__time'>
-                                        <p>timeButton</p>
+                                    <label htmlFor="creeate-task-number">Set number</label>
+                                    <input type="text" id="creeate-task-number" placeholder='Set number'/>
                                     </div>
                                 </div>
 
@@ -82,7 +96,7 @@ export const ModalCreateTask = () => {
                                         <p>category</p>
                                         <p>equipment</p>
                                         <p>brigade</p>
-                                        <p>brigadier</p>
+                                        {/* <p>brigadier</p> */}
                                         <p>date</p>
                                         <p>price</p>
                                         <p>completed</p>
@@ -90,8 +104,10 @@ export const ModalCreateTask = () => {
                                     <div className='modal-create-task__container__first__body__text'>
                                         <p>Hurt</p>
                                         <p>Crane</p>
-                                        <p>N1</p>
-                                        <p>John Smith</p>
+                                         <select name="status" id="creeate-task-brigade">
+                                            <Brigade/>                                 
+                                        </select>
+                                        {/* <p>John Smith</p> */}
                                         <p>04.10.2019</p>
                                         <p>1500</p>
                                         <p>05.10.2019</p>
@@ -204,4 +220,29 @@ const SubtaskList = () => {
             </div>
         </div>
     ))
+}
+
+const Priority = () => {
+    const priorities = [ '', 'low', 'middle', 'high']
+    return (
+        <React.Fragment>
+            {priorities.map(priority => (<option key={priority}>{priority}</option>))}
+        </React.Fragment>
+    )
+}
+const Status = () => {
+    const priorities = ['', 'red', 'orange', 'green']
+    return (
+        <React.Fragment>
+            {priorities.map(priority => (<option key={priority}>{priority}</option>))}
+        </React.Fragment>
+    )
+}
+const Brigade = () => {
+    const priorities = ['', 'First', 'Second', 'Third', 'Forth']
+    return (
+        <React.Fragment>
+            {priorities.map(priority => (<option key={priority}>{priority}</option>))}
+        </React.Fragment>
+    )
 }

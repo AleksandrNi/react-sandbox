@@ -180,8 +180,7 @@ const Priority = (priority) => {
     let customClass;
     switch (priority) {
         case 'low':
-            customClass = 'green'
-            
+            customClass = 'green'  
             break;
         case 'middle':
             customClass = 'orange'
