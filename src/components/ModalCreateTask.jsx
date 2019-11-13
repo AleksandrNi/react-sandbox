@@ -1,23 +1,48 @@
-import React from 'react'
-import {ModalContext} from 'ModalContext.jsx'
+import React, { useEffect } from 'react'
+import {UseStateValue} from 'context/State';
 
-export const ModalCreateTask = ({createTask, mask, setCreateTaskFunc, setMuskFunk}) => {
-    console.log(createTask);
-    console.log(mask);
-    console.log(setCreateTaskFunc);
-    console.log(setMuskFunk);
+export const ModalCreateTask = () => {
+    const [state, dispatch] = UseStateValue();
+    // console.log('state');
+    // console.log(state);
+    //     console.log('dispatch');
+    //     console.log(dispatch);
 
-    
-    const modalCreateTaskClass = !createTask 
+    const modalCreateTaskClass = state.displayModalCreateTask
         ? 'modal-create-task' 
         : 'modal-create-task-disabled';
 
+    const closeModalCreateTask = () => dispatch({
+        type: 'MODAL_CREATE_TASK_OFF',
+        payload: ''
+    })
+
+    const clickOutside = (event)=> {
+        
+        const target = event.target;
+
+        if( !target.closest('#modalCreateMask') && state.displayModalCreateTask ) {
+            closeModalCreateTask()
+        }
+    }
+    
+    useEffect(()=> {        
+        document.addEventListener('click', clickOutside)
+
+        return () => document.removeEventListener('click', clickOutside)
+        
+    })
+
+
+
     return (
-        <div className={modalCreateTaskClass}>
+        <div className={modalCreateTaskClass} id='modalCreateMask' >
             <div className='modal-create-task__wrapper'>
                 <div className='modal-create-task__head'>
                     <p>Task</p>
-                    <div className='modal-create-task__head__close'>
+                    <div 
+                    onClick={closeModalCreateTask}
+                    className='modal-create-task__head__close'>
                         <i className="material-icons md-18">close</i>
                     </div>
                 </div>
@@ -161,8 +186,10 @@ const SubtaskList = () => {
         {title: 'subtask title 3'},
         {title: 'subtask title 4'},
     ]
-    return subTasks.map(item => (
-        <div className='subtask-item'>
+    return subTasks.map((item, index) => (
+        <div 
+        key={index}
+        className='subtask-item'>
             <div className='subtask-item__actions'>
                 <p>{item.title}</p>
                 <select name="" id="">

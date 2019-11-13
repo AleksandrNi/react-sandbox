@@ -1,28 +1,19 @@
 import React, { useState, useContext } from 'react';
-import {ModalContext} from 'ModalContext.jsx'
+import {UseStateValue} from 'context/State'
 
 export const Tasks = (props) => {
+    const [inialState, dispatch] = UseStateValue();
+    // console.log('inialState');
+    // console.log(inialState);
+    // console.log('dispatch');
+    // console.log(dispatch);
 
-    const {createTask, mask, setCreateTaskFunc, setMuskFunk} = useContext(ModalContext)
-    
-    const [query, setQuery] = useState('');
-    const setQueryFunc = (value) => setQuery(query => value)
-    
-    const [tasks, setTasks] = useState(tempTasks)
-    
-    // [{
-    //     data: '',
-    //     number: '',
-    //     status: '', // (green|orange|red)
-    //     name: '',
-    //     priority: '', // (low|middle|high)
-    //     brigade: '',
-    //     object: ''
-
-    // }] 
+    const createTaskMethod = () => dispatch({
+        type: 'MODAL_CREATE_TASK_ON',
+        payload: ''
+    })
 
     return (
-        <ModalContext.Provider>
             <div className='tasks-container'>
                 <div className='tasks-header'>
                     <div><p>Tasks</p></div>
@@ -49,14 +40,14 @@ export const Tasks = (props) => {
                         </div>
                     </div>
                     <div className='tasks-header__search-bar__search'>
-                        <input type="text" onChange={(event) => setQueryFunc(event.target.value)}/>
+                        {/* <input type="text" onChange={  }/> */}
                     </div>
                     <div className='tasks-header__search-bar__search__total-result'>
-                        <p>total tasks: {query}</p>
+                        <p>total tasks: 10</p>
                     </div>
                     <div className='tasks-header__search-bar__create-new-task'>
                         <div 
-                        onClick={setCreateTaskFunc}
+                        onClick={createTaskMethod}
                         className='tasks-header__search-bar__create-new-task__button'>
                             <i className="material-icons md-18">add_circle_outline</i>
                             <p>Create new task</p>
@@ -74,12 +65,10 @@ export const Tasks = (props) => {
                         <div><p>Brigade/Person</p></div>
                         <div><p>Object</p></div>
                     </div>
-                    <TasksList tasks={tasks}/>
+                    {/* <TasksList tasks={tasks}/> */}
                 </div>
 
             </div>
-
-        </ModalContext.Provider>
     )
 }
 

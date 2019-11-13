@@ -3,49 +3,37 @@ import './App.scss';
 
 import {Aside} from 'components/Aside/Aside.jsx'
 import {RoutesList} from 'routes/AsideRoutes'
-import {
-  BrowserRouter as Router,
-} from "react-router-dom";
+import {BrowserRouter as Router} from "react-router-dom";
 
-import {ModalContext} from 'ModalContext.jsx'
+import {StateProvider} from 'context/State'
+import {initialState} from 'context/State'
+import {reducer} from 'context/State'
 
 import {ModalCreateTask} from 'components/ModalCreateTask'
+import {Mask} from 'components/Mask'
 
 
 export default function App() {
-    const [createTask,setCreateTask] = useState(false)
-    const setCreateTaskFunc = ()=>setCreateTask(createTask=>!createTask)
-    const [mask, setMask] = useState(false)
-    const setMuskFunk = ()=>setMask(mask=>!mask)
-    
-    const coustomMaskClass = !mask ? 'mask-active' : '';
 
     return (
-        <ModalContext.Provider value={{
-            createTask,
-            setCreateTaskFunc,
-            mask,
-            setMuskFunk,
-            }}>
+        <StateProvider 
+        initialState={initialState}
+        reducer={reducer}
+        >
 
             <Router>
-            <div className={coustomMaskClass}> </div>
-            <main>
-                <Aside/>
-                <section>
-                    <RoutesList  />
-                </section>
-            </main>
-            
-            <ModalCreateTask 
-            createTask={createTask}
-            mask={mask} 
-            setCreateTaskFunc={setCreateTaskFunc} 
-            setMuskFunk={setMuskFunk}
-            />
+           
+            <div className='main-wrapper'>
+                <main>
+                    <Aside/>
+                    <section>
+                        <RoutesList  />
+                    </section>
+                </main>
+            </div>
+                <Mask/>
+                <ModalCreateTask />
             </Router>
-
-        </ModalContext.Provider>
-    );
+        </StateProvider>
+    )
 }
-
