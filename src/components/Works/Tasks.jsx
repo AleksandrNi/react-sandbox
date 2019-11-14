@@ -2,12 +2,18 @@ import React, { useState, useContext } from 'react';
 import {UseStateValue} from 'context/State'
 
 export const Tasks = (props) => {
-    const [inialState, dispatch] = UseStateValue();
-    // console.log('inialState');
-    // console.log(inialState);
-    // console.log('dispatch');
-    // console.log(dispatch);
+    const [state, dispatch] = UseStateValue();
+    console.log('props');
+    console.log(props);
+    
 
+
+    const [filteredList, setFilteredList] = useState([])
+    
+    const setFilterFunc = (value) => setFilteredList(filteredList=>state.tasks.filter(task=>task.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ))    
+    const tasksList = filteredList.length ? filteredList : state.tasks;
+
+    const tasksListClass = tasksList.length ? 'tasks-list' : 'tasks-list-disabled'
     const createTaskMethod = () => dispatch({
         type: 'MODAL_CREATE_TASK_ON',
         payload: ''
@@ -40,10 +46,10 @@ export const Tasks = (props) => {
                         </div>
                     </div>
                     <div className='tasks-header__search-bar__search'>
-                        {/* <input type="text" onChange={  }/> */}
+                        <input type="text" onChange={event=>setFilterFunc(event.target.value)} />
                     </div>
                     <div className='tasks-header__search-bar__search__total-result'>
-                        <p>total tasks: 10</p>
+                        <p>total tasks: {tasksList.length}</p>
                     </div>
                     <div className='tasks-header__search-bar__create-new-task'>
                         <div 
@@ -55,7 +61,7 @@ export const Tasks = (props) => {
                     </div>
                 </div>
 
-                <div className='tasks-list'>
+                <div className={tasksListClass}>
                     <div className='tasks-list__head'>
                         <div><p>Data</p></div>
                         <div><p>Number</p></div>
@@ -65,7 +71,7 @@ export const Tasks = (props) => {
                         <div><p>Brigade/Person</p></div>
                         <div><p>Object</p></div>
                     </div>
-                    {/* <TasksList tasks={tasks}/> */}
+                    <TasksList tasks={tasksList}/>
                 </div>
 
             </div>

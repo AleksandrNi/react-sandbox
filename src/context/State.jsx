@@ -17,7 +17,15 @@ export const reducer = (state, action) => {
         
         case 'MODAL_CREATE_TASK_OFF':   return {...state, displayModalCreateTask: false,  displayMask: false }
         
-        case 'MODAL_CREATE_TASK':       return [...state, action.payload]
+        case 'MODAL_CREATE_TASK':       
+        const newTasksList = [...state.tasks]
+        newTasksList.push(action.payload)      
+        console.log('newTasksList');
+        console.log(newTasksList);
+        console.log("{...state, tasks: newTasksList }");
+        console.log({...state, tasks: newTasksList });
+        
+        return {...state, tasks: newTasksList }
 
         case 'MODAL_EDIT_TASK':
             const indexExists = state.findIndex(task=>task.id === action.payload.id)

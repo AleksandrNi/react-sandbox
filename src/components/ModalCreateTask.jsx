@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {UseStateValue} from 'context/State';
-import { setPriority } from 'os';
 
 export const ModalCreateTask = () => {
     const [state, dispatch] = UseStateValue();
-    // console.log('state');
-    // console.log(state);
-    //     console.log('dispatch');
-    //     console.log(dispatch);
+
+    const [task, setTask] = useState({
+        data: new Date().toISOString().split('T')[0],
+        number: '',
+        status: '', // (green|orange|red)
+        name: '',
+        priority: '', // (low|middle|high)
+        brigade: '',
+        object: '',
+        id: '',
+    });
 
     const modalCreateTaskClass = state.displayModalCreateTask
         ? 'modal-create-task' 
@@ -32,10 +38,41 @@ export const ModalCreateTask = () => {
         
     })
 
-    const setPriorityMethod = (event) => {
-        console.log( event.target.value);
-        return true
+    const setTaskMethod = (value, action) => {
+        const switcher = setTask((task) => {return {...task, [action]: value}})
+
+        switch (action) {
+            case 'data':    return switcher
+            case 'number':  return switcher
+            case 'status':  return switcher
+            case 'name':    return switcher
+            case 'priority':return switcher
+            case 'brigade': return switcher 
+            case 'object':  return switcher
+            default:
+                console.log('unexpected case');
+                console.log(value);
+                console.log(action);
+                break;
+        }
     }
+
+    const submitTask = () => {
+        let taskCompleted = true
+        for(let key in task) {
+            if(!task[key]) {
+                taskCompleted = false;
+                break;
+            }
+        }
+        // if(!taskCompleted) return;
+        task.id = ~~(Math.random()*1000);
+        dispatch({
+            type: 'MODAL_CREATE_TASK',
+            payload: task
+        })
+    }
+    
 
     return (
         <div className={modalCreateTaskClass} id='modalCreateMask' >
@@ -61,8 +98,8 @@ export const ModalCreateTask = () => {
                                     <div className='modal-create-task__container__first__body__priority'>
                                         <label htmlFor="creeate-task-priority">Select priority</label>
                                             <select 
-                                            onChange={setPriorityMethod}
-                                            value='Select priority'
+                                            onChange={(event) => setTaskMethod(event.target.value, 'priority')}
+                                            value={task.priority}
                                             name="creeate-task-priority" 
                                             id="creeate-task-priority">
                                                 <Priority />
@@ -71,23 +108,32 @@ export const ModalCreateTask = () => {
                                     </div>
                                     <div className='modal-create-task__container__first__body__data'>
                                     <label htmlFor="creeate-task-date">Set data</label>
-                                            <input type="text" id="creeate-task-date" value={new Date().toISOString().split('T')[0]}/>
+                                            <input type="text" id="creeate-task-date" placeholder={task.data} />
                                     </div>
                                 </div>
                                 <div className='modal-create-task__container__first__body__name'>
-                                    <input type="text" placeholder='Type task name' value='Type task'/>
+                                    <input 
+                                    onChange={(event) => setTaskMethod(event.target.value, 'name')}
+                                    type="text" placeholder='Type task name' placeholder='Type task'/>
                                 </div>
 
                                 <div className='modal-create-task__container__first__body__status'>
                                     <div>
                                     <label htmlFor="creeate-task-status">Select status</label>
-                                    <select name="status" id="creeate-task-status">
+                                    <select 
+                                     onChange={(event) => setTaskMethod(event.target.value, 'status')}
+                                    name="status" 
+                                    id="creeate-task-status"
+                                    value={task.status}
+                                    >
                                         <Status/>                                 
                                     </select>
                                     </div>
                                     <div className='modal-create-task__container__first__body__time'>
                                     <label htmlFor="creeate-task-number">Set number</label>
-                                    <input type="text" id="creeate-task-number" placeholder='Set number'/>
+                                    <input 
+                                     onChange={(event) => setTaskMethod(event.target.value, 'number')}
+                                    type="text" id="creeate-task-number" placeholder='Set number'/>
                                     </div>
                                 </div>
 
@@ -98,23 +144,32 @@ export const ModalCreateTask = () => {
                                         <p>brigade</p>
                                         {/* <p>brigadier</p> */}
                                         <p>date</p>
-                                        <p>price</p>
+                                        {/* <p>price</p> */}
                                         <p>completed</p>
                                     </div>
                                     <div className='modal-create-task__container__first__body__text'>
                                         <p>Hurt</p>
                                         <p>Crane</p>
-                                         <select name="status" id="creeate-task-brigade">
+                                         <select 
+                                        onChange={(event) => setTaskMethod(event.target.value, 'brigade')}
+                                        name="status" 
+                                        id="creeate-task-brigade"
+                                        value={task.brigade}
+                                        >
                                             <Brigade/>                                 
                                         </select>
                                         {/* <p>John Smith</p> */}
                                         <p>04.10.2019</p>
-                                        <p>1500</p>
+                                        {/* <p>1500</p> */}
                                         <p>05.10.2019</p>
                                     </div>
 
                                 </div>
-
+                                <div 
+                                onClick={submitTask}
+                                className='modal-create-task__submit-button'>
+                                    Submit
+                                </div>
                             </div>
                         </div>
 
