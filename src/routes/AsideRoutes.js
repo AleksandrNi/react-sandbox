@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Switch,
     Route,
+    Redirect
     } from "react-router-dom";
 
 // const OtherComponent = React.lazy(() => import('./OtherComponent'));
@@ -92,10 +93,12 @@ export const RoutesList = () => {
                         path={parentRoute + route.path}
                         component={route.component}
                       >
+                    
                     </Route>
                     )
                 )})
             }
+            <Route exact path="/" render={() => <Redirect to={'works/tasks'} />} />
         </Switch>
     )
 }

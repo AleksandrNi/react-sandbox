@@ -14,7 +14,8 @@ import {Mask} from 'components/Mask'
 
 
 export default function App() {
-
+    
+    
     return (
         <StateProvider 
         initialState={initialState}
@@ -25,7 +26,7 @@ export default function App() {
            
             <div className='main-wrapper'>
                 <main>
-                    <Aside/>
+                    <Aside />
                     <section>
                         <RoutesList  />
                     </section>

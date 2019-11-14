@@ -3,10 +3,6 @@ import {UseStateValue} from 'context/State'
 
 export const Tasks = (props) => {
     const [state, dispatch] = UseStateValue();
-    console.log('props');
-    console.log(props);
-    
-
 
     const [filteredList, setFilteredList] = useState([])
     
@@ -18,6 +14,23 @@ export const Tasks = (props) => {
         type: 'MODAL_CREATE_TASK_ON',
         payload: ''
     })
+
+    const setActiveTask = (task) => {
+        console.log('task');
+        console.log(task);
+        
+        dispatch({
+            type: 'MODAL_SET_ACTIVE_TASK',
+            payload: task
+        });
+    
+        dispatch({
+            type: 'MODAL_CREATE_TASK_ON',
+            payload: ''
+        });
+        
+
+    }
 
     return (
             <div className='tasks-container'>
@@ -71,20 +84,21 @@ export const Tasks = (props) => {
                         <div><p>Brigade/Person</p></div>
                         <div><p>Object</p></div>
                     </div>
-                    <TasksList tasks={tasksList}/>
+                    <TasksList tasks={tasksList} setActiveTask={setActiveTask}/>
                 </div>
 
             </div>
     )
 }
 
-const TasksList = ({tasks}) => {
+const TasksList = ({tasks, setActiveTask}) => {
     return (
         <React.Fragment>
             {tasks.length && tasks.map(task=> {
                 return (
                     <div 
                     key={task.id}
+                    onClick={((event)=>setActiveTask(task))}
                     className='tasks-list__task'>
                         <div><p>{task.data}</p></div>
                         <div><p>{task.number}</p></div>

@@ -50,8 +50,12 @@ align-items: center;
             ul {
                 padding: 0px;
                 
-                li {
+                .aside-menu-items {
                     list-style-type: none;
+                    & :active,
+                    active {
+                        color: silver;
+                    }
                     a {
                         padding: .5rem;
                         color: aliceblue;
@@ -183,6 +187,7 @@ align-items: center;
                     justify-content: space-between;
                     align-items: center;
                     width: 100%;
+                    cursor: pointer;
                     
                     .tasks-list__head {
                         p {
@@ -199,7 +204,7 @@ align-items: center;
                         display: grid;
                         grid-template-areas: 
                         'date number status name ptiority brigade object';
-                        grid-template-columns: 100px 75px 100px  1fr 75px 125px 100px;
+                        grid-template-columns: 125px 75px 100px  1fr 75px 125px 100px;
                         grid-gap: .5rem;
                         grid-auto-rows: 4rem;
                         justify-items: start;

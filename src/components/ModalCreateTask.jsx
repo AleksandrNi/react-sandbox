@@ -4,25 +4,22 @@ import {UseStateValue} from 'context/State';
 export const ModalCreateTask = () => {
     const [state, dispatch] = UseStateValue();
 
-    const [task, setTask] = useState({
-        data: new Date().toISOString().split('T')[0],
-        number: '',
-        status: '', // (green|orange|red)
-        name: '',
-        priority: '', // (low|middle|high)
-        brigade: '',
-        object: '',
-        id: '',
-    });
+    const task = state.activeTask;
 
     const modalCreateTaskClass = state.displayModalCreateTask
         ? 'modal-create-task' 
         : 'modal-create-task-disabled';
 
-    const closeModalCreateTask = () => dispatch({
-        type: 'MODAL_CREATE_TASK_OFF',
-        payload: ''
-    })
+    const closeModalCreateTask = () => {    
+        dispatch({
+            type: 'MODAL_CREATE_TASK_OFF',
+            payload: ''
+        })
+        dispatch({
+            type: 'MODAL_CLEAN_ACTIVE_TASK'
+        })
+        document.getElementById("modal-create-task-form").reset();
+    }
 
     const clickOutside = (event)=> {
         const target = event.target;
@@ -31,24 +28,33 @@ export const ModalCreateTask = () => {
         }
     }
     
-    useEffect(()=> {        
+    useEffect(()=> { 
         document.addEventListener('click', clickOutside)
-
-        return () => document.removeEventListener('click', clickOutside)
+        
+        return () => {
+            document.removeEventListener('click', clickOutside)
+        }
         
     })
 
     const setTaskMethod = (value, action) => {
-        const switcher = setTask((task) => {return {...task, [action]: value}})
+
+        const switcher = () => {
+            return dispatch({
+                type: 'MODAL_SET_ACTIVE_TASK',
+                payload: {...state.activeTask, [action]: value }
+            });
+        }
+        
 
         switch (action) {
-            case 'data':    return switcher
-            case 'number':  return switcher
-            case 'status':  return switcher
-            case 'name':    return switcher
-            case 'priority':return switcher
-            case 'brigade': return switcher 
-            case 'object':  return switcher
+            case 'data':    return switcher()
+            case 'number':  return switcher()
+            case 'status':  return switcher()
+            case 'name':    return switcher()
+            case 'priority':return switcher()
+            case 'brigade': return switcher() 
+            case 'object':  return switcher()
             default:
                 console.log('unexpected case');
                 console.log(value);
@@ -58,22 +64,43 @@ export const ModalCreateTask = () => {
     }
 
     const submitTask = () => {
-        let taskCompleted = true
-        for(let key in task) {
-            if(!task[key]) {
-                taskCompleted = false;
-                break;
-            }
-        }
+        // let taskCompleted = true
+        // for(let key in task) {
+        //     if(!task[key]) {
+        //         taskCompleted = false;
+        //         break;
+        //     }
+        // }
         // if(!taskCompleted) return;
-        task.id = ~~(Math.random()*1000);
-        dispatch({
-            type: 'MODAL_CREATE_TASK',
-            payload: task
-        })
+        // task.id = ~~(Math.random()*1000);
+        if(typeof state.activeTask.id === 'number') { 
+            dispatch({
+                type: 'MODAL_SET_ACTIVE_TASK',
+                payload: {
+                    ...state.activeTask, 
+                    data: state.activeTask.data ? state.activeTask.data : new Date().toISOString().split('T')[0]  
+                }
+            });
+            dispatch({
+                type: 'MODAL_EDIT_TASK'
+            })
+            closeModalCreateTask()
+        } else {
+            dispatch({
+                type: 'MODAL_SET_ACTIVE_TASK',
+                payload: {
+                    ...state.activeTask, id: ~~(Math.random()*1000), 
+                    data: state.activeTask.data ? state.activeTask.data : new Date().toISOString().split('T')[0] 
+                }
+            });
+            dispatch({
+                type: 'MODAL_CREATE_TASK'
+            })
+            closeModalCreateTask()
+        }
+
     }
     
-
     return (
         <div className={modalCreateTaskClass} id='modalCreateMask' >
             <div className='modal-create-task__wrapper'>
@@ -89,6 +116,7 @@ export const ModalCreateTask = () => {
                 <div className='wrapper-column'>
                     <div className='modal-create-task__container'>
                         <div className='modal-create-task__container__first' >
+                            <form id='modal-create-task-form' >
                             {/* <div className='modal-create-task__container__first__header'><p>Header</p></div> */}
                             <div className='modal-create-task__container__first__image'>
                                 <img src="https://picsum.photos/400/200" alt=""/>
@@ -99,7 +127,7 @@ export const ModalCreateTask = () => {
                                         <label htmlFor="creeate-task-priority">Select priority</label>
                                             <select 
                                             onChange={(event) => setTaskMethod(event.target.value, 'priority')}
-                                            value={task.priority}
+                                            value={task.priority || ''}
                                             name="creeate-task-priority" 
                                             id="creeate-task-priority">
                                                 <Priority />
@@ -113,8 +141,12 @@ export const ModalCreateTask = () => {
                                 </div>
                                 <div className='modal-create-task__container__first__body__name'>
                                     <input 
+                                    value={task.name || ''}
                                     onChange={(event) => setTaskMethod(event.target.value, 'name')}
-                                    type="text" placeholder='Type task name' placeholder='Type task'/>
+                                    type="text" 
+                                    placeholder='Type task name' 
+                                    placeholder='Type task'
+                                    />
                                 </div>
 
                                 <div className='modal-create-task__container__first__body__status'>
@@ -124,7 +156,7 @@ export const ModalCreateTask = () => {
                                      onChange={(event) => setTaskMethod(event.target.value, 'status')}
                                     name="status" 
                                     id="creeate-task-status"
-                                    value={task.status}
+                                    value={task.status || ''}
                                     >
                                         <Status/>                                 
                                     </select>
@@ -133,7 +165,9 @@ export const ModalCreateTask = () => {
                                     <label htmlFor="creeate-task-number">Set number</label>
                                     <input 
                                      onChange={(event) => setTaskMethod(event.target.value, 'number')}
-                                    type="text" id="creeate-task-number" placeholder='Set number'/>
+                                    type="text" id="creeate-task-number" placeholder='Set number'
+                                    value={task.number || ''}
+                                    />
                                     </div>
                                 </div>
 
@@ -171,6 +205,7 @@ export const ModalCreateTask = () => {
                                     Submit
                                 </div>
                             </div>
+                            </form>
                         </div>
 
 

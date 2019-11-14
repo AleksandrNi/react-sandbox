@@ -2,9 +2,10 @@ import React from 'react'
 
 import {AsideRoutes} from 'routes/AsideRoutes'
 import {Link} from 'react-router-dom'
+
 export const Aside = (props) => {
     const types = Object.keys(AsideRoutes);
-    
+
     return (
         <aside >
             <div className='Logo'>
@@ -13,7 +14,7 @@ export const Aside = (props) => {
             </div>
             <hr/>
 
-            {types.map(type => {
+            {types.map((type, index) => {
                 return (               
                 <ul
                 key={type}
@@ -32,7 +33,7 @@ export const Aside = (props) => {
 
 const TypesList = ({routeList, parentPath}) => routeList.map((route,index) => {
     return (
-        <li
+        <li className='aside-menu-items'
         key={route.name+index}
         >
             <Link
