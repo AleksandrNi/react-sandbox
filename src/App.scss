@@ -59,8 +59,10 @@ align-items: center;
                 .aside-menu-items {
                     text-decoration: none;
                     list-style-type: none;
-                    & :hover, :active {
-                        color: #ffbda5;
+                    & :hover {
+                        i {
+                            color: #ffbda5;
+                        }
                     }
                     li {
                         padding: .5rem;
