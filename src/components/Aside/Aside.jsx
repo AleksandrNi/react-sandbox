@@ -1,11 +1,12 @@
 import React from 'react'
 
 import {AsideRoutes} from 'routes/AsideRoutes'
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 
 export const Aside = (props) => {
     const types = Object.keys(AsideRoutes);
-
+    console.log(props);
+    
     return (
         <aside >
             <div className='Logo'>
@@ -33,15 +34,17 @@ export const Aside = (props) => {
 
 const TypesList = ({routeList, parentPath}) => routeList.map((route,index) => {
     return (
-        <li className='aside-menu-items'
+        <NavLink
         key={route.name+index}
+        to={parentPath + route.path}
+        className='aside-menu-items'
+        activeClassName="aside-menu-items-active"
         >
-            <Link
-            to={parentPath + route.path}
-            >
+        <li 
+        >
             <i className="material-icons md-18">{route.icon}</i><p>{route.name}</p>
-            </Link>
         </li>
+        </NavLink>
 
     )
 })

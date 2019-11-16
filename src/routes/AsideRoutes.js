@@ -10,6 +10,7 @@ import {Tasks} from 'components/Works/Tasks.jsx'
 import {DefectList} from 'components/Works/DefectList.jsx'
 import {Requests} from 'components/Works/Requests.jsx'
 import {Reports} from 'components/Works/Reports.jsx'
+import {Common} from 'components/objects/Common.jsx'
 
 
 export const AsideRoutes = {
@@ -41,40 +42,40 @@ export const AsideRoutes = {
             },
         ],
     },
-    // objects: {
-    //     path: '/objects',
-    //     items:  [{
-    //         name: 'Objects',
-    //         path:'/objects',
-    //         icon: 'Objects',
-    //         component: Objects
-    //         },
-    //         {
-    //         name: 'Equipment',
-    //         path:'/equipment',
-    //         icon: 'Equipment',
-    //         component: Equipment
-    //         },
-    //         {
-    //         name: 'Parts',
-    //         path:'/parts',
-    //         icon: 'parts',
-    //         component: Parts
-    //         },
-    //         {
-    //         name: 'Meter',
-    //         path:'/Meter',
-    //         icon: 'Meter',
-    //         component: Meter
-    //         },
-    //         {
-    //         name: 'Purchase requisition',
-    //         path:'/purchase-requisition',
-    //         icon: '',
-    //         component: PurchaseRequisition
-    //         },
-    //     ],
-    // }
+    objects: {
+        path: '/objects',
+        items:  [{
+            name: 'Objects',
+            path:'/objects',
+            icon: 'assignment',
+            component: Common
+            },
+            {
+            name: 'Equipment',
+            path:'/equipment',
+            icon: 'assignment',
+            component: Common
+            },
+            {
+            name: 'Parts',
+            path:'/parts',
+            icon: 'assignment',
+            component: Common
+            },
+            {
+            name: 'Meter',
+            path:'/Meter',
+            icon: 'assignment',
+            component: Common
+            },
+            {
+            name: 'Purchase requisition',
+            path:'/purchase-requisition',
+            icon: 'assignment',
+            component: Common
+            },
+        ],
+    }
 
 }
 
@@ -91,7 +92,10 @@ export const RoutesList = () => {
                     <Route 
                         key={route.name+index}
                         path={parentRoute + route.path}
-                        component={route.component}
+                        render={(routeProps) => {
+                            const Component = route.component;
+                            return <Component {...routeProps} key={route.name+index} title={route.name} />
+                        }}
                       >
                     
                     </Route>

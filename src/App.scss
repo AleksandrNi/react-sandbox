@@ -51,12 +51,12 @@ align-items: center;
                 padding: 0px;
                 
                 .aside-menu-items {
+                    text-decoration: none;
                     list-style-type: none;
-                    & :active,
-                    active {
+                    & :active {
                         color: silver;
                     }
-                    a {
+                    li {
                         padding: .5rem;
                         color: aliceblue;
                         display: flex;
@@ -69,7 +69,17 @@ align-items: center;
                             margin: 0;
                         }
                     }
+                    
                 }
+                .aside-menu-items-active {
+                    i {
+
+                        color: #83AED7;
+                    }
+                }
+                
+
+
             }
 
         }
@@ -481,8 +491,6 @@ align-items: center;
                     select {
                         height: 20px;
                     }
-
-
                 }
                 &__task-details {
                     display: flex;
@@ -503,7 +511,6 @@ align-items: center;
                     text-align: left;
                     margin: .5rem 1rem;
                     width: 100%;
-
                 }
 
                 .modal-create-task__submit-button {
