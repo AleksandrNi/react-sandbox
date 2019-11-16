@@ -10,7 +10,7 @@ export const Aside = (props) => {
     return (
         <aside >
             <div className='Logo'>
-                <img src="https://cdn.worldvectorlogo.com/logos/dropzone.svg" alt=""/>
+                <img src="https://cdn.worldvectorlogo.com/logos/copyright-red.svg" alt=""/>
                 <p>Digital platform</p>
             </div>
             <hr/>
@@ -42,7 +42,7 @@ const TypesList = ({routeList, parentPath}) => routeList.map((route,index) => {
         >
         <li 
         >
-            <i className="material-icons md-18">{route.icon}</i><p>{route.name}</p>
+            <i className="material-icons-outlined  md-18">{route.icon}</i><p>{route.name}</p>
         </li>
         </NavLink>
 
