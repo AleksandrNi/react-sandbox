@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {UseStateValue} from 'context/State';
 
 export const ModalCreateTask = () => {
@@ -20,10 +20,11 @@ export const ModalCreateTask = () => {
         })
         document.getElementById("modal-create-task-form").reset();
     }
+    const modalCreateMaskRef = useRef();
 
     const clickOutside = (event)=> {
         const target = event.target;
-        if( !target.closest('#modalCreateMask') && state.displayModalCreateTask ) {
+        if( !modalCreateMaskRef.current.contains(target) && state.displayModalCreateTask ) {            
             closeModalCreateTask()
         }
     }
@@ -35,7 +36,15 @@ export const ModalCreateTask = () => {
             document.removeEventListener('click', clickOutside)
         }
         
-    })
+    }, [modalCreateTaskClass])
+
+    // DATE INPUT
+    const dateInputEvent =  state.activeTask.date ? 'completedDate' : 'date'
+    const dateInputDisabled = (state.activeTask.date && state.activeTask.status !== 'done') 
+    || !state.activeTask.completedDate && state.activeTask.status === 'done' 
+        ? true
+        : false
+
 
     const setTaskMethod = (value, action) => {
 
@@ -48,12 +57,12 @@ export const ModalCreateTask = () => {
         
 
         switch (action) {
-            case 'data':    return switcher()
-            case 'number':  return switcher()
-            case 'status':  return switcher()
-            case 'name':    return switcher()
-            case 'priority':return switcher()
-            case 'brigade': return switcher() 
+            case 'date':    
+            case 'number':  
+            case 'status':  
+            case 'name':    
+            case 'priority':
+            case 'brigade':  
             case 'object':  return switcher()
             default:
                 console.log('unexpected case');
@@ -78,7 +87,12 @@ export const ModalCreateTask = () => {
                 type: 'MODAL_SET_ACTIVE_TASK',
                 payload: {
                     ...state.activeTask, 
-                    data: state.activeTask.data ? state.activeTask.data : new Date().toISOString().split('T')[0]  
+                    date: state.activeTask.date ? state.activeTask.date : new Date().toISOString().split('T')[0],
+                    completedDate:  state.activeTask.status === 'done' ? 
+                        state.activeTask.completedDate ? 
+                            state.activeTask.completedDate : 
+                            new Date().toISOString().split('T')[0]
+                        :"",
                 }
             });
             dispatch({
@@ -90,7 +104,12 @@ export const ModalCreateTask = () => {
                 type: 'MODAL_SET_ACTIVE_TASK',
                 payload: {
                     ...state.activeTask, id: ~~(Math.random()*1000), 
-                    data: state.activeTask.data ? state.activeTask.data : new Date().toISOString().split('T')[0] 
+                    date: state.activeTask.date ? state.activeTask.date : new Date().toISOString().split('T')[0],
+                    completedDate:  state.activeTask.status === 'done' ? 
+                    state.activeTask.completedDate ? 
+                        state.activeTask.completedDate : 
+                        new Date().toISOString().split('T')[0]
+                    :"",
                 }
             });
             dispatch({
@@ -102,10 +121,10 @@ export const ModalCreateTask = () => {
     }
     
     return (
-        <div className={modalCreateTaskClass} id='modalCreateMask' >
+        <div className={modalCreateTaskClass} ref={modalCreateMaskRef} >
             <div className='modal-create-task__wrapper'>
                 <div className='modal-create-task__head'>
-                    <p>Task</p>
+                    <p>{state.activeTask.id ? 'Task - edit': 'Task - create'}</p>
                     <div 
                     onClick={closeModalCreateTask}
                     className='modal-create-task__head__close'>
@@ -134,9 +153,15 @@ export const ModalCreateTask = () => {
                                             </select>
                                                 
                                     </div>
-                                    <div className='modal-create-task__container__first__body__data'>
-                                    <label htmlFor="creeate-task-date">Set data</label>
-                                            <input type="text" id="creeate-task-date" placeholder={task.data} />
+                                    <div className='modal-create-task__container__first__body__date'>
+                                    <label htmlFor="creeate-task-date">Set date</label>
+                                            <input 
+                                            type="text" 
+                                            disabled={dateInputDisabled}
+                                            id="creeate-task-date" 
+                                            placeholder={task.data} 
+                                            onChange={(event) => setTaskMethod(event.target.value.slice(0,10), dateInputEvent)}
+                                            />
                                     </div>
                                 </div>
                                 <div className='modal-create-task__container__first__body__name'>
@@ -177,7 +202,7 @@ export const ModalCreateTask = () => {
                                         <p>equipment</p>
                                         <p>brigade</p>
                                         {/* <p>brigadier</p> */}
-                                        <p>date</p>
+                                        <p>Start date</p>
                                         {/* <p>price</p> */}
                                         <p>completed</p>
                                     </div>
@@ -193,9 +218,9 @@ export const ModalCreateTask = () => {
                                             <Brigade/>                                 
                                         </select>
                                         {/* <p>John Smith</p> */}
-                                        <p>04.10.2019</p>
+                                        <p>{state.activeTask.date || new Date().toISOString().split('T')[0]  }</p>
                                         {/* <p>1500</p> */}
-                                        <p>05.10.2019</p>
+                                        <p>{state.activeTask.completedDate || 'not yet'}</p>
                                     </div>
 
                                 </div>
@@ -313,26 +338,26 @@ const SubtaskList = () => {
 }
 
 const Priority = () => {
-    const priorities = [ '', 'low', 'middle', 'high']
+    const options = [ '', 'low', 'middle', 'high']
     return (
         <React.Fragment>
-            {priorities.map(priority => (<option key={priority}>{priority}</option>))}
+            {options.map(option => (<option key={option}>{option}</option>))}
         </React.Fragment>
     )
 }
 const Status = () => {
-    const priorities = ['', 'red', 'orange', 'green']
+    const options = ['', 'process', 'done', 'expired']
     return (
         <React.Fragment>
-            {priorities.map(priority => (<option key={priority}>{priority}</option>))}
+            {options.map(option => (<option key={option}>{option}</option>))}
         </React.Fragment>
     )
 }
 const Brigade = () => {
-    const priorities = ['', 'First', 'Second', 'Third', 'Forth']
+    const options = ['', 'First', 'Second', 'Third', 'Forth']
     return (
         <React.Fragment>
-            {priorities.map(priority => (<option key={priority}>{priority}</option>))}
+            {options.map(option => (<option key={option}>{option}</option>))}
         </React.Fragment>
     )
 }

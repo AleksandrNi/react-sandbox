@@ -8,7 +8,8 @@ export const Tasks = (props) => {
     
     const setFilterFunc = (value) => setFilteredList(filteredList=>state.tasks.filter(task=>task.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ))    
     const tasksList = filteredList.length ? filteredList : state.tasks;
-
+    console.log(tasksList   );
+    
     const tasksListClass = tasksList.length ? 'tasks-list' : 'tasks-list-disabled'
     const createTaskMethod = () => dispatch({
         type: 'MODAL_CREATE_TASK_ON',
@@ -76,7 +77,7 @@ export const Tasks = (props) => {
 
                 <div className={tasksListClass}>
                     <div className='tasks-list__head'>
-                        <div><p>Data</p></div>
+                        <div><p>Date</p></div>
                         <div><p>Number</p></div>
                         <div><p>Status</p></div>
                         <div><p>Task name</p></div>
@@ -100,7 +101,7 @@ const TasksList = ({tasks, setActiveTask}) => {
                     key={task.id}
                     onClick={((event)=>setActiveTask(task))}
                     className='tasks-list__task'>
-                        <div><p>{task.data}</p></div>
+                        <div><p>{task.date}</p></div>
                         <div><p>{task.number}</p></div>
                         <div className='tasks-list__task__status'>{Status(task.status)}</div>
                         <div><p>{task.name}</p></div>
@@ -119,7 +120,7 @@ const tempTasks = [
     {
         data: '05.10.2019',
         number: '1',
-        status: 'green', // (green|orange|red)
+        status: 'done', // (done|process|expired)
         name: 'Some task name',
         priority: 'low', // (low|middle|high)
         brigade: 'brigade N1',
@@ -130,7 +131,7 @@ const tempTasks = [
     {
         data: '03.11.2019',
         number: '2',
-        status: 'orange', // (green|orange|red)
+        status: 'process', // (done|process|expired)
         name: 'New task name 2',
         priority: 'middle', // (low|middle|high)
         brigade: 'brigade N2',
@@ -141,7 +142,7 @@ const tempTasks = [
     {
         data: '02.09.2019',
         number: '3',
-        status: 'red', // (green|orange|red)
+        status: 'expired', // (done|process|expired)
         name: 'Another task name',
         priority: 'high', // (low|middle|high)
         brigade: 'John',
@@ -152,7 +153,7 @@ const tempTasks = [
     {
         data: '15.10.2019',
         number: '1',
-        status: 'green', // (green|orange|red)
+        status: 'done', // (done|process|expired)
         name: 'Huge problem',
         priority: 'low', // (low|middle|high)
         brigade: 'Smith',
@@ -168,17 +169,17 @@ const Status = (status) => {
     let customClass = 'material-icons md-18';
 
     switch (status) {
-        case 'red':
+        case 'expired':
             icon = 'schedule'
             text = 'expired'
             customClass += ' red'
             break;
-        case 'orange':
+        case 'process':
             icon = 'navigate_next'
             text = 'process'
             customClass += ' orange600'
             break;
-        case 'green':
+        case 'done':
             icon = 'done'
             text = 'done'
             customClass += ' green'

@@ -51,7 +51,8 @@ export const initialState = {
     displayModalCreateTask: false,
     activeTask: {},
     taskTemplate: {
-            data: '',
+            date: '',
+            completedDate: '',
             number: '',
             status: '', // (green|orange|red)
             name: '',

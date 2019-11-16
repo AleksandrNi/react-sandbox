@@ -391,11 +391,14 @@ align-items: center;
         border-radius: 5px;
         padding-top: 1.5rem;
         &__first {
-            display: flex;
             width: 400px;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            
+            form {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
 
             &__header {
                 display:flex;
@@ -499,6 +502,8 @@ align-items: center;
 
                     text-align: left;
                     margin: .5rem 1rem;
+                    width: 100%;
+
                 }
 
                 .modal-create-task__submit-button {
