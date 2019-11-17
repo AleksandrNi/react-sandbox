@@ -13,7 +13,11 @@ export const StateProvider = ({reducer, initialState, children}) => (
 export const UseStateValue = () => useContext(StateContext);
 
 export const reducer = (state, action) => {
-
+    console.log('==========');
+    console.log('action');
+    console.log(action);
+    console.log('==========');
+    
     switch (action.type) {
         case 'MODAL_CREATE_TASK_ON':    return {...state,  displayModalCreateTask: true,  displayMask: true }
         

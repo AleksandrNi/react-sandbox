@@ -1,14 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {UseStateValue} from 'context/State'
 
 export const Tasks = (props) => {
     const [state, dispatch] = UseStateValue();
 
-    const [filteredList, setFilteredList] = useState([])
+    const [filteredList, setFilteredList] = useState({value: '', filteredList: []})
     
-    const setFilterFunc = (value) => setFilteredList(filteredList=>state.tasks.filter(task=>task.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 ))    
-    const tasksList = filteredList.length ? filteredList : state.tasks;
-    console.log(tasksList   );
+    const setFilterFunc = (value) => setFilteredList(filteredList=>{
+        return {
+            value,
+            filteredList: state.tasks.filter(task=> task.name && task.name.toLowerCase().indexOf(value.toLowerCase()) !== -1 )
+        }
+    })    
+    const tasksList = filteredList.filteredList.length || filteredList.value ? filteredList.filteredList : state.tasks;
     
     const tasksListClass = tasksList.length ? 'tasks-list' : 'tasks-list-disabled'
     const createTaskMethod = () => dispatch({
@@ -17,8 +21,6 @@ export const Tasks = (props) => {
     })
 
     const setActiveTask = (task) => {
-        console.log('task');
-        console.log(task);
         
         dispatch({
             type: 'MODAL_SET_ACTIVE_TASK',
@@ -33,48 +35,57 @@ export const Tasks = (props) => {
 
     }
 
+
+    useEffect(()=>{
+        setFilterFunc(filteredList.value)
+    },[state.tasks])
+
     return (
             <div className='tasks-container'>
-                <div className='tasks-header'>
-                    <div><p>Tasks</p></div>
-                    <div className='tasks-header__logo'>
-                        <div>
-                            <i className="material-icons md-18">notifications_none</i>
-                        </div>
-                        <div>
-                            <i className="material-icons md-18">person</i>
+                <div className='tasks-header-container'>
+                    <div className='tasks-header'>
+                        <div><p>Tasks</p></div>
+                        <div className='tasks-header__logo'>
+                            <div>
+                                <i className="material-icons md-18">notifications_none</i>
+                            </div>
+                            <div>
+                                <i className="material-icons md-18">person</i>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div className='tasks-header__search-bar'>
-                    <div className='tasks-header__search-bar__filters'>
-                        <div>
-                        <i className="material-icons md-18">assignment</i>
+                    <div className='tasks-header__search-bar'>
+                        <div className='tasks-header__search-bar__filters'>
+                            <div>
+                            <i className="material-icons md-18">assignment</i>
+                            </div>
+                            <div>
+                            <i className="material-icons md-18">list_alt</i>
+                            </div>
+                            <div>
+                            <i className="material-icons md-18">description</i>
+                            </div>
                         </div>
-                        <div>
-                        <i className="material-icons md-18">list_alt</i>
+                        <div className='tasks-header__search-bar__search'>
+                            <input 
+                            type="text" 
+                            onChange={event=>setFilterFunc(event.target.value)} />
                         </div>
-                        <div>
-                        <i className="material-icons md-18">description</i>
+                        <div className='tasks-header__search-bar__search__total-result'>
+                            <p>total tasks: {tasksList.length}</p>
+                        </div>
+                        <div className='tasks-header__search-bar__create-new-task'>
+                            <div 
+                            onClick={createTaskMethod}
+                            className='tasks-header__search-bar__create-new-task__button'>
+                                <i className="material-icons md-18">add_circle_outline</i>
+                                <p>Create new task</p>
+                            </div>
                         </div>
                     </div>
-                    <div className='tasks-header__search-bar__search'>
-                        <input type="text" onChange={event=>setFilterFunc(event.target.value)} />
-                    </div>
-                    <div className='tasks-header__search-bar__search__total-result'>
-                        <p>total tasks: {tasksList.length}</p>
-                    </div>
-                    <div className='tasks-header__search-bar__create-new-task'>
-                        <div 
-                        onClick={createTaskMethod}
-                        className='tasks-header__search-bar__create-new-task__button'>
-                            <i className="material-icons md-18">add_circle_outline</i>
-                            <p>Create new task</p>
-                        </div>
-                    </div>
+    
                 </div>
-
                 <div className={tasksListClass}>
                     <div className='tasks-list__head'>
                         <div><p>Date</p></div>

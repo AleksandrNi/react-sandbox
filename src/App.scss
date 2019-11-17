@@ -36,6 +36,7 @@ align-items: center;
             flex-direction: row;
             justify-content: space-around;
             align-items: center;
+            cursor: grab;
             ;
                 img {
                     width: 50px;
@@ -103,116 +104,121 @@ align-items: center;
             .tasks-container {
                 width: 100%;
                 height: calc(100% - .5rem);
-                border: thin solid #abc;
+                background-color: #fbfbfb;
 
-                .tasks-header {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    align-items: center;
+                .tasks-header-container {
+                    // background-color: whitesmoke;
+                    padding-top: .5rem;
                     width: 100%;
-                    margin-top: .5rem;
-
-                    div {
-                        margin: 0 1rem;
-                        p { 
-                            font-weight: bolder;
-                        }
-                    }
-                    .tasks-header__logo {
-                        display: flex;
-                        flex-direction: row;
-                        width: 100px;
-                        justify-content: space-between;
-                        align-items: center;
-                        i {
-                            cursor: pointer;
-                        }
-                    }
-                }
-
-                .tasks-header__search-bar {
-                    background-color: #eaeaea;
-                    display:flex;
-                    flex-direction: row;
-                    flex-wrap: nowrap;
-                    margin-top: .5rem;
-                    width: 100%;
-                    height: 5rem;
-                    justify-content: space-between;
-                    align-items: center;
-                    p  {
-                        margin: 2px;
-                    }
-
-                    .tasks-header__search-bar__filters {
+                    .tasks-header {
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
                         align-items: center;
-                        margin-left: 1rem;
-                        width: 100px;
-                        i {
-                            margin-top: 4px;
-                            cursor: pointer;
+                        width: 100%;
+    
+                        div {
+                            margin: 0 1rem;
+                            p { 
+                                font-weight: bolder;
+                            }
                         }
-                    }
-                    .tasks-header__search-bar__search {
-                        border: thin solid #abc;
-                        border-radius: 5px;
-                        margin-left: 1rem;
-                        width: 25%;
-                        background-color: white;
-                        input {
-                            width: calc(100% - .5rem);
-                            margin: .25rem;
-                            outline: none;
-                            border: none;
-                        }
-                    }
-                    .tasks-header__search-bar__search__total-result {
-                        margin-left: 1rem;
-                        width: 200px;
-                    }
-                    .tasks-header__search-bar__create-new-task {
-                        border-radius: 5px;
-                        border: thin solid tomato;
-                        margin-right: 1rem;
-                        background-color: white;
-
-                        :hover {
-                            background-color: tomato;
-                            border-radius: 5px;
-                            color: whitesmoke;
-                            cursor: pointer;
-                        }
-                        .tasks-header__search-bar__create-new-task__button {
-                            padding: .5rem 1rem;
+                        .tasks-header__logo {
                             display: flex;
                             flex-direction: row;
-                            justify-content: space-around;
+                            width: 100px;
+                            justify-content: space-between;
                             align-items: center;
                             i {
                                 cursor: pointer;
-                                margin-right: 1rem;
                             }
-                            p {
-                                
-                                padding: 0 .5rem 3px 0;
-                                width: max-content;
+                        }
+                    }
+    
+                    .tasks-header__search-bar {
+                        background-color: aliceblue;
+                        display:flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        margin-top: .5rem;
+                        width: 100%;
+                        height: 5rem;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-radius: 5px;
+                        p  {
+                            margin: 2px;
+                        }
+    
+                        .tasks-header__search-bar__filters {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-left: 1rem;
+                            width: 100px;
+                            i {
+                                margin-top: 4px;
+                                cursor: pointer;
                             }
-
+                        }
+                        .tasks-header__search-bar__search {
+                            border: thin solid #abc;
+                            border-radius: 5px;
+                            margin-left: 1rem;
+                            width: 25%;
+                            background-color: white;
+                            input {
+                                width: calc(100% - .5rem);
+                                margin: .25rem;
+                                outline: none;
+                                border: none;
+                            }
+                        }
+                        .tasks-header__search-bar__search__total-result {
+                            margin-left: 1rem;
+                            width: 200px;
+                        }
+                        .tasks-header__search-bar__create-new-task {
+                            border-radius: 5px;
+                            border: thin solid tomato;
+                            margin-right: 1rem;
+                            background-color: white;
+    
+                            :hover {
+                                background-color: tomato;
+                                border-radius: 5px;
+                                color: whitesmoke;
+                                cursor: pointer;
+                            }
+                            .tasks-header__search-bar__create-new-task__button {
+                                padding: .5rem 1rem;
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-around;
+                                align-items: center;
+                                i {
+                                    cursor: pointer;
+                                    margin-right: 1rem;
+                                }
+                                p {
+                                    
+                                    padding: 0 .5rem 3px 0;
+                                    width: max-content;
+                                }
+    
+                            }
                         }
                     }
                 }
+
                 .tasks-list {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
                     align-items: center;
-                    width: 100%;
                     cursor: pointer;
-                    
+
                     .tasks-list__head {
                         p {
                             font-weight: 600; 
@@ -232,9 +238,10 @@ align-items: center;
                         grid-gap: .5rem;
                         grid-auto-rows: 4rem;
                         justify-items: start;
-                        width: 100%;
-                        border-bottom: thin solid #abc;
-                        background-color: floralwhite;
+                        width: calc(100% - 1rem);
+                        padding: .25rem;
+                        border-bottom: thin solid #fbfbfb;
+                        background-color: #fbfbfb;
 
                         div {
                             display: flex;
@@ -314,8 +321,21 @@ align-items: center;
                     .tasks-list__task:nth-child(1)  {
                         grid-area: status;
                     }
-                    .tasks-list__task:nth-child(even)  {
-                        background-color: white ;
+                    .tasks-list__head {
+                        margin-top: .5rem;
+                        margin-bottom: .25rem;
+                        border-radius: 5px;
+                        background-color: whitesmoke;
+                        border: thin solid rgb(233, 233, 233);
+                    }
+                    .tasks-list__task  {
+                        // margin: .25rem;
+                        margin: .25rem 0;
+                        border-radius: 5px;
+                        background-color: whitesmoke;
+                    &:hover {
+                        background-color: gainsboro;
+                    }
                     }
 
                 }
